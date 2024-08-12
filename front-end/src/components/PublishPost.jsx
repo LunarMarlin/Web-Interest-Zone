@@ -14,7 +14,7 @@ const PublishPost = ({ creator, zone, goBack }) => {
         event.preventDefault();
         const block = document.getElementById('editable');
         const theContent = block.innerHTML;
-        client.post('http://localhost:7001/api/publishPost', { title: title, introduction: introduction, zone: zone.id, creator: creator, content: theContent }).then((response) => {
+        client.post('http://localhost:7001/api/publishPost', { title: title, introduction: introduction, zone: zone.id, creator: creator.id, content: theContent }).then((response) => {
             setMessage(response.data.message); goBack();
         }).catch(function (error) {
             console.log(error);

@@ -6,6 +6,7 @@ import Login from './components/Login'
 import FindZone from './components/FindZone';
 import NavBar from './components/NavBar'
 import MainPage from './components/MainPage'
+import CheckMembers from './components/CheckMembers';
 import CreateZone from './components/CreateZone'
 import OneZone from './components/OneZone';
 import InnerZone from './components/InnerZone'
@@ -33,8 +34,11 @@ function App() {
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(true);
   const [userID, setUserID] = useState(12);
+  const [user, setUser] = useState(null);
   const [zone, setZone] = useState(null);
   const [toFindZone, setToFindZone] = useState(false);
+  const client = axios.default;
+
   const updateZone = (zone) => {
     return () => {
       setZone(zone);
@@ -46,19 +50,24 @@ function App() {
       navigate('/zone/:' + zone.name);
     }
   }, [zone]);
+  useEffect(() => {
+    client.get('http://localhost:7001/api/user/' + userID).then((response) => {
+      setUser(response.data);
+    });
+  }, [userID]);
 
   return (
     <Routes>
       <Route path="/" element={
 
         <div className='flex flex-col h-screen space-y-5'>
-          <NavBar toFindZone={toFindZone} setToFindZone={() => { setToFindZone(!toFindZone); }} userID={userID} />
+          <NavBar toFindZone={toFindZone} setToFindZone={() => { setToFindZone(!toFindZone); }} user={user} />
           {/* {!loggedIn &&
               <div>
                 <Register setLoggedIn={setLoggedIn} />
                 <Login setLoggedIn={setLoggedIn} setUserID={setUserID}/>
               </div>} */}
-          {/* <CreateZone creator={userID} /> */}
+          {/* <CreateZone creator={user} /> */}
           {/* {loggedIn && <MainPage />} */}
           {/* <InnerZone /> */}
           {!toFindZone && <Recommendation />}
@@ -71,7 +80,7 @@ function App() {
       <Route path="/zone/:name" element={
         <>
 
-          <NavBar toFindZone={toFindZone} setToFindZone={() => { setToFindZone(!toFindZone); }} inside={true} zone={zone} userID={userID} />
+          <NavBar toFindZone={toFindZone} setToFindZone={() => { setToFindZone(!toFindZone); }} inside={true} zone={zone} user={user} />
           <div className="mb-5" />
           <InnerZone zone={zone} />
         </>} />
@@ -79,16 +88,16 @@ function App() {
 
       <Route path="/publishPost" element={
         <div className="flex flex-col h-screen">
-          <NavBar toFindZone={toFindZone} setToFindZone={() => { setToFindZone(!toFindZone); }} userID={userID} />
-          <PublishPost creator={userID} zone={zone} goBack={() => { navigate('/zone/:' + zone.name); alert('发布成功!'); }} />
+          <NavBar toFindZone={toFindZone} setToFindZone={() => { setToFindZone(!toFindZone); }} user={user} />
+          <PublishPost creator={user} zone={zone} goBack={() => { navigate('/zone/:' + zone.name); alert('发布成功!'); }} />
         </div>
 
       } />
 
       <Route path="/post/:postID/:zoneID" element={
         <div>
-          {/* <NavBar toFindZone={toFindZone} setToFindZone={() => { setToFindZone(!toFindZone); }} inside={true} userID={userID}/> */}
-          <InnerContent user={userID} />
+          {/* <NavBar toFindZone={toFindZone} setToFindZone={() => { setToFindZone(!toFindZone); }} inside={true} user={user}/> */}
+          <InnerContent user={user} />
         </div>
       } />
 
@@ -98,6 +107,14 @@ function App() {
           <ProfilePage />
         </div>
       } />
+
+      <Route path="/checkMembers/:zoneID" element={
+        <div>
+          <NavBar toFindZone={toFindZone} setToFindZone={() => { setToFindZone(!toFindZone); }} inside={true} user={user} />
+          <CheckMembers />
+        </div>
+      } />
+
     </Routes>
   )
 }

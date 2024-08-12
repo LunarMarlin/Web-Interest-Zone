@@ -3,7 +3,7 @@ import CreateZoneButton from './CreateZoneButton'
 import FindZoneButton from './FindZoneButton';
 import Input from './Input'
 import axios from 'axios';
-const NavBar = ({ toFindZone, setToFindZone, inside = false, zone = null, userID }) => {
+const NavBar = ({ toFindZone, setToFindZone, inside = false, zone = null, user }) => {
     const [search, setSearch] = useState("");
     return <>
         <nav className="flex h-20 items-center px-4 py-5 bg-blue-200 justify-between">
@@ -24,8 +24,8 @@ const NavBar = ({ toFindZone, setToFindZone, inside = false, zone = null, userID
                 </div>
             </div>
             <button onClick={() => {
-                window.open('/user/' + userID);
-            }}>You</button>
+                window.open('/user/' + user.id);
+            }} className='text-xl'>{user.username}</button>
         </nav>
     </>
 }

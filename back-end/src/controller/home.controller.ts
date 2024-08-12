@@ -104,6 +104,10 @@ export class HomeController {
   async getPostIDByID(@Param('postID') postID: number) {
     return await this.postService.getByID(postID);
   }
+  @Get('/getPosts/:zoneID')
+  async getPostIDByZone(@Param('zoneID') zoneID: number) {
+    return await this.postService.getByZone(zoneID);
+  }
 
   @Post('/sendComment')
   async sendComment(@Body() body: { post: number, creator: number, content: string }) {

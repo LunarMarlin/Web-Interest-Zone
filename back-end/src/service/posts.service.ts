@@ -35,8 +35,8 @@ export class PostsService {
         return this.Post.find({
             where: whereClause,
             order: {
-                likes: 'ASC'
-            }
+                created_at: 'DESC'
+            },
         })
     }
     async getByID(postID: number): Promise<Posts> {
@@ -46,6 +46,17 @@ export class PostsService {
             }
         })
     }
+
+    async getByZone(zoneID: number): Promise<Posts[]> {
+        return this.Post.find({
+            where: {
+                zone: zoneID
+            }, order: {
+                created_at: 'DESC'
+            },
+        })
+    }
+
     async updateCommentCount(postID: number): Promise<void> {
         const target = await this.Post.findOne({
             where: {
