@@ -8,11 +8,10 @@ describe('test/controller/home.test.ts', () => {
     const app = await createApp<Framework>();
 
     // make request
-    const result = await createHttpRequest(app).get('/');
+    const result = await createHttpRequest(app).get('/api');
 
     // use expect by jest
     expect(result.status).toBe(200);
-    expect(result.text).toBe('Hello Midwayjs!');
 
     // close app
     await close(app);

@@ -30,6 +30,7 @@ export class ZonesService {
             }
         })
     }
+
     async getByID(zoneID: number): Promise<Zones> {
         return this.Zone.findOne({
             where: {
@@ -37,6 +38,7 @@ export class ZonesService {
             }
         })
     }
+
     async updatePostCount(zoneID: number): Promise<void> {
         const target = await this.Zone.findOne({
             where: {

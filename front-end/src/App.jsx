@@ -56,7 +56,8 @@ function App() {
     setUser(JSON.parse(localStorage.getItem('user')));
     navigate('/mainPage')
   }, [loggedIn]);
-  if (!user) return (
+
+  if (localStorage.getItem('user') == null) return (
     <Routes>
       <Route path="*" element={<Navigate to="/" />} />
 

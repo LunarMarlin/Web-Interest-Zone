@@ -21,7 +21,7 @@ export default {
         host: 'localhost',          // 数据库主机
         port: 5432,                 // 数据库端口
         username: 'testuser', // 数据库用户名
-        password: '050522', // 数据库密码
+        password: '123456', // 数据库密码
         database: 'interestzone',   // 数据库名称
         synchronize: false,          // 自动同步实体到数据库
         logging: false,             // 禁用查询日志

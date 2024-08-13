@@ -102,6 +102,12 @@ export class HomeController {
     const { zones, user } = body;
     return await this.postService.getAll(zones, user);
   }
+
+  @Get('/user/:ID')
+  async getUser(@Param('ID') ID: number) {
+    return await this.userinfoService.getUserByID(ID);
+  }
+
   @Get('/zone/:zoneID')
   async getZoneByID(@Param('zoneID') zoneID: number) {
     return await this.zonesService.getByID(zoneID);
@@ -133,10 +139,6 @@ export class HomeController {
     return this.commentsService.getAllFromPost(post);
   }
 
-  @Get('/user/:ID')
-  async getUser(@Param('ID') ID: number) {
-    return await this.userinfoService.getUserByID(ID);
-  }
   @Get('/register/checkUsername/:username')
   async checkUsername(@Param('username') username: string) {
     return await this.userinfoService.checkUsername(username);
