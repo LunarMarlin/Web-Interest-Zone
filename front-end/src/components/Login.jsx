@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Input from './Input';
+import { useNavigate } from 'react-router-dom'
 
 const Login = ({ setLoggedIn, setUserID }) => {
     const client = axios.default;
+    const navigate = useNavigate;
     let successful = false;
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -12,8 +14,11 @@ const Login = ({ setLoggedIn, setUserID }) => {
     const handleLogin = async (event) => {
         event.preventDefault();
         client.post('http://localhost:7001/api/login', { username: username, password: password }).then((response) => {
-            setMessage(response.data.message); setLoggedIn(true); setUserID(12);//获取用户id
-            //(await getRepository(Userinfo).findOne({ where: { username } })).id
+            setMessage(response.data.message);
+            if (response.data.user) {
+                setLoggedIn(true);
+                setUserID(response.data.user.id);
+            }
         })
             .catch(function (error) { console.log(error) });
     }

@@ -19,9 +19,8 @@ export class UserinfoService {
         // save entity
         return await this.UserModel.save(user);
     }
-    async login(username: string, password: string): Promise<Userinfo | null> {
-        const a = await this.UserModel.findOne({ where: { username: username, password: password } });
-        return a;
+    async getUserByName(username: string): Promise<Userinfo | null> {
+        return await this.UserModel.findOne({ where: { username: username } });
     }
 
     async getUserByID(ID: number) {
@@ -30,5 +29,14 @@ export class UserinfoService {
                 id: ID
             }
         })
+    }
+
+    async checkUsername(username: string): Promise<boolean> {
+        const user = await this.UserModel.findOne({ where: { username: username } });
+        return !user;
+    }
+    async checkEmail(email: string): Promise<boolean> {
+        const user = await this.UserModel.findOne({ where: { email: email } });
+        return !user;
     }
 }

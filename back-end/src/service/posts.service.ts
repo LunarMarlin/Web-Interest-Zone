@@ -29,7 +29,7 @@ export class PostsService {
         if (zones?.length > 0) {
             whereClause.zone = In(zones);
         }
-        if (!user) {
+        if (user) {
             whereClause.creator = user;
         }
         return this.Post.find({

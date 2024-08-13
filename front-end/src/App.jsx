@@ -19,21 +19,10 @@ import ProfilePage from './components/ProfilePage';
 
 
 function App() {
-  // const [message, setMessage] = useState('')
 
-  // useEffect(() => {
-  //   // Fetch message from Midway backend
-  //   axios.get('http://localhost:7001/add')  
-  //     .then(response => {
-  //       setMessage(response.data.message);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching data:', error);
-  //     });
-  // }, []);
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(true);
-  const [userID, setUserID] = useState(12);
+  const [userID, setUserID] = useState(null);
   const [user, setUser] = useState(null);
   const [zone, setZone] = useState(null);
   const [toFindZone, setToFindZone] = useState(false);
@@ -51,17 +40,28 @@ function App() {
     }
   }, [zone]);
   useEffect(() => {
+    if (!userID) return;
     client.get('http://localhost:7001/api/user/' + userID).then((response) => {
       setUser(response.data);
     });
   }, [userID]);
 
+
+  useEffect(() => {
+    if (!user) return;
+    navigate('/mainPage')
+  }, [user]);
+
   return (
     <Routes>
-      <Route path="/" element={
+      <Route path="/" element={< div >
+        <Register setLoggedIn={setLoggedIn} setUserID={setUserID} />
+        <Login setLoggedIn={setLoggedIn} setUserID={setUserID} />
+      </div>} />
+      < Route path="/mainPage" element={
 
-        <div className='flex flex-col h-screen space-y-5'>
-          <NavBar toFindZone={toFindZone} setToFindZone={() => { setToFindZone(!toFindZone); }} user={user} />
+        < div className='flex flex-col h-screen space-y-5' >
+          <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} user={user} />
           {/* {!loggedIn &&
               <div>
                 <Register setLoggedIn={setLoggedIn} />
@@ -72,50 +72,50 @@ function App() {
           {/* <InnerZone /> */}
           {!toFindZone && <Recommendation />}
           {toFindZone && <FindZone setZone={updateZone} />}
-        </div>
+        </div >
 
 
       } />
-      <Route path="/createZone" element={<CreateZone creator={12} />} />
-      <Route path="/zone/:name" element={
+      < Route path="/createZone" element={< CreateZone creator={userID} />} />
+      < Route path="/zone/:name" element={
         <>
 
-          <NavBar toFindZone={toFindZone} setToFindZone={() => { setToFindZone(!toFindZone); }} inside={true} zone={zone} user={user} />
+          <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} inside={true} zone={zone} user={user} />
           <div className="mb-5" />
           <InnerZone zone={zone} />
         </>} />
 
 
-      <Route path="/publishPost" element={
-        <div className="flex flex-col h-screen">
-          <NavBar toFindZone={toFindZone} setToFindZone={() => { setToFindZone(!toFindZone); }} user={user} />
+      < Route path="/publishPost" element={
+        < div className="flex flex-col h-screen" >
+          <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} user={user} />
           <PublishPost creator={user} zone={zone} goBack={() => { navigate('/zone/:' + zone.name); alert('发布成功!'); }} />
-        </div>
+        </div >
 
       } />
 
-      <Route path="/post/:postID/:zoneID" element={
-        <div>
-          {/* <NavBar toFindZone={toFindZone} setToFindZone={() => { setToFindZone(!toFindZone); }} inside={true} user={user}/> */}
-          <InnerContent user={user} />
-        </div>
+      < Route path="/post/:postID/:zoneID" element={
+        < div >
+          {/* <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} inside={true} user={user}/> */}
+          < InnerContent user={user} />
+        </div >
       } />
 
 
-      <Route path="/user/:userID" element={
-        <div>
+      < Route path="/user/:userID" element={
+        < div >
           <ProfilePage />
-        </div>
+        </div >
       } />
 
-      <Route path="/checkMembers/:zoneID" element={
-        <div>
-          <NavBar toFindZone={toFindZone} setToFindZone={() => { setToFindZone(!toFindZone); }} inside={true} user={user} />
+      < Route path="/checkMembers/:zoneID" element={
+        < div >
+          <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} inside={true} user={user} />
           <CheckMembers />
-        </div>
+        </div >
       } />
 
-    </Routes>
+    </Routes >
   )
 }
 

@@ -37,10 +37,10 @@ const InnerContent = ({ user }) => {
     }
 
     useEffect(() => {
-        client.get('http://localhost:7001/api/getZone/' + zoneID).then((response) => {
+        client.get('http://localhost:7001/api/zone/' + zoneID).then((response) => {
             setZone(response.data);
         });
-        client.get('http://localhost:7001/api/getPost/' + postID).then((response) => {
+        client.get('http://localhost:7001/api/post/' + postID).then((response) => {
             setPost(response.data);
         });
 

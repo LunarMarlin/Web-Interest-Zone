@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as axios from 'axios';
 import Input from './Input';
-// import bcrypt from 'bcryptjs';
 
-const Register = ({ setLoggedIn }) => {
-  // const salt = bcrypt.genSaltSync(10);
-  const client = axios.default;
+const Register = ({ setLoggedIn, setUserID }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [hashed_password, sethasHed_password] = useState('');
   const [repassword, setrePassword] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  let successful = false;
+  const [usernameCorrect, setUsernameCorrect] = useState(null);
+  const [emailCorrect, setEmailCorrect] = useState(null);
+  const client = axios.default;
 
   const handleRegister = async (event) => {
     event.preventDefault();
@@ -24,13 +24,45 @@ const Register = ({ setLoggedIn }) => {
       return;
     }
     // const hashed_password = bcrypt.hashSync(password, salt);
-    const hashed_password = password;
+    client.get('http://localhost:7001/api/password/getHashed/' + password).then(response => {
+      sethasHed_password(response.data);
+    })
+  };
+
+  useEffect(() => {
+    if (!hashed_password) return;
+    console.log(hashed_password);
+    client.get('http://localhost:7001/api/register/checkUsername/' + username).then(response => {
+      setUsernameCorrect(response.data);
+    })
+
+    client.get('http://localhost:7001/api/register/checkEmail/' + email).then(response => {
+      setEmailCorrect(response.data);
+    })
+
+
+  }, [hashed_password]);
+
+  useEffect(() => {
+    if (usernameCorrect === null || emailCorrect === null) return;
+    if (!usernameCorrect) {
+      setMessage('该用户名已被占用');
+      setEmailCorrect(null);
+      setUsernameCorrect(null);
+      return;
+    }
+    if (!emailCorrect) {
+      setMessage('该邮箱已被注册');
+      setEmailCorrect(null);
+      setUsernameCorrect(null);
+      return;
+    }
     client.post('http://localhost:7001/api/register', { username: username, email: email, password: hashed_password }).then((response) => {
-      setMessage(response.data.message); successful = true; setLoggedIn(true);
+      setMessage(response.data.message); setLoggedIn(true); alert("注册成功~"); setUserID(response.data.user.id);
     }).catch(function (error) {
       console.log(error);
     });
-  };
+  }, [usernameCorrect, emailCorrect]);
 
   return (
     <div className="rounded-md">
@@ -44,10 +76,10 @@ const Register = ({ setLoggedIn }) => {
           <Input setText={setEmail} Label={"邮箱"} value={email} />
         </div>
         <div>
-          <Input setText={setPassword} Label={"密码"} value={password} />
+          <Input setText={setPassword} Label={"密码"} type='password' value={password} />
         </div>
         <div>
-          <Input setText={setrePassword} Label={"确认密码"} value={repassword} />
+          <Input setText={setrePassword} Label={"确认密码"} type='password' value={repassword} />
         </div>
         <button type="submit" className='button' >Register</button>
       </form>
