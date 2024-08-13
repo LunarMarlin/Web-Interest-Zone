@@ -4,17 +4,18 @@ import ContentInput from './ContentInput';
 import FindZoneButton from './FindZoneButton';
 import Input from './Input'
 import axios from 'axios';
-const SendComment = ({ creator, post, addComment }) => {
+const SendComment = ({ post, addComment }) => {
 
     const [content, setContent] = useState("");
     const [message, setMessage] = useState("");
     const client = axios.default;
+    const user = JSON.parse(localStorage.getItem('user'));
     const submit = async (event) => {
 
         event.preventDefault();
         const block = document.getElementById('editable');
         const theContent = block.innerHTML;
-        client.post('http://localhost:7001/api/sendComment', { post: post, creator: creator, content: theContent }).then((response) => {
+        client.post('http://localhost:7001/api/sendComment', { post: post, creator: user.id, content: theContent }).then((response) => {
             setMessage(response.data.message); addComment(); setContent('');
             //(await getRepository(Userinfo).findOne({ where: { username } })).id
         })

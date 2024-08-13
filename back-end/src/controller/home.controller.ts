@@ -25,7 +25,7 @@ export class HomeController {
     const { username, email, password } = body;
     try {
       const user = await this.userinfoService.register(username, email, password);
-      return { message: '注册成功!', userId: user.id };
+      return { message: '注册成功!', user: user };
     } catch (error) {
       console.error(error);
       return { message: '出错了~' };

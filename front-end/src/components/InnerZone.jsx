@@ -4,7 +4,7 @@ import PublishButton from './PublishButton';
 import CheckMembers from './CheckMembers';
 import { useNavigate } from 'react-router-dom';
 
-const InnerZone = ({ creator, zone }) => {
+const InnerZone = ({ creator, zone ,userID}) => {
 
     const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ const InnerZone = ({ creator, zone }) => {
             <div className="mb-5" />
             <div className="flex flex-grow flex-col space-y-10">
                 <div className="flex-grow bg-gray-100">
-                    <ShowContent zones={[zone.id]} />
+                    <ShowContent zones={[zone.id]} userID={userID} />
                 </div>
             </div>
         </>

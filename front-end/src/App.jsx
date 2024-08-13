@@ -21,10 +21,10 @@ import ProfilePage from './components/ProfilePage';
 function App() {
 
   const navigate = useNavigate();
-  const [loggedIn, setLoggedIn] = useState(true);
-  const [userID, setUserID] = useState(null);
   const [user, setUser] = useState(null);
+  const [userID, setUserID] = useState(12);
   const [zone, setZone] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [toFindZone, setToFindZone] = useState(false);
   const client = axios.default;
 
@@ -35,41 +35,41 @@ function App() {
   }
   useEffect(() => {
     if (zone !== null) {
-      // 在 zone 状态更新后执行某些操作
       navigate('/zone/:' + zone.name);
     }
   }, [zone]);
-  useEffect(() => {
-    if (!userID) return;
-    client.get('http://localhost:7001/api/user/' + userID).then((response) => {
-      setUser(response.data);
-    });
-  }, [userID]);
-
 
   useEffect(() => {
-    if (!user) return;
+    const a = JSON.parse(localStorage.getItem('user'));
+    if (a) {
+      setUser(a);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!loggedIn) return;
+    setUser(JSON.parse(localStorage.getItem('user')));
     navigate('/mainPage')
+  }, [loggedIn]);
+
+  useEffect(() => {
+    console.log(user);
   }, [user]);
 
   return (
     <Routes>
-      <Route path="/" element={< div >
-        <Register setLoggedIn={setLoggedIn} setUserID={setUserID} />
-        <Login setLoggedIn={setLoggedIn} setUserID={setUserID} />
-      </div>} />
+      <Route path="/" element={
+        < div className='flex h-screen w-screen items-center justify-center'>
+          <div className='flex space-x-20'>
+            <Register setLoggedIn={setLoggedIn} />
+            <Login setLoggedIn={setLoggedIn} />
+          </div>
+        </div>
+      } />
       < Route path="/mainPage" element={
 
         < div className='flex flex-col h-screen space-y-5' >
-          <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} user={user} />
-          {/* {!loggedIn &&
-              <div>
-                <Register setLoggedIn={setLoggedIn} />
-                <Login setLoggedIn={setLoggedIn} setUserID={setUserID}/>
-              </div>} */}
-          {/* <CreateZone creator={user} /> */}
-          {/* {loggedIn && <MainPage />} */}
-          {/* <InnerZone /> */}
+          <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} />
           {!toFindZone && <Recommendation />}
           {toFindZone && <FindZone setZone={updateZone} />}
         </div >
@@ -80,7 +80,7 @@ function App() {
       < Route path="/zone/:name" element={
         <>
 
-          <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} inside={true} zone={zone} user={user} />
+          <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} inside={true} zone={zone} />
           <div className="mb-5" />
           <InnerZone zone={zone} />
         </>} />
@@ -88,16 +88,15 @@ function App() {
 
       < Route path="/publishPost" element={
         < div className="flex flex-col h-screen" >
-          <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} user={user} />
-          <PublishPost creator={user} zone={zone} goBack={() => { navigate('/zone/:' + zone.name); alert('发布成功!'); }} />
+          <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} />
+          <PublishPost zone={zone} goBack={() => { navigate('/zone/:' + zone.name); alert('发布成功!'); }} />
         </div >
 
       } />
 
-      < Route path="/post/:postID/:zoneID" element={
+      < Route path="/post/:postID/:zoneID/:userID" element={
         < div >
-          {/* <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} inside={true} user={user}/> */}
-          < InnerContent user={user} />
+          {< InnerContent />}
         </div >
       } />
 
@@ -110,7 +109,7 @@ function App() {
 
       < Route path="/checkMembers/:zoneID" element={
         < div >
-          <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} inside={true} user={user} />
+          <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} inside={true} />
           <CheckMembers />
         </div >
       } />

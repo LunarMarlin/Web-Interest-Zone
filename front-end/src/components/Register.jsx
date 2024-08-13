@@ -58,16 +58,19 @@ const Register = ({ setLoggedIn, setUserID }) => {
       return;
     }
     client.post('http://localhost:7001/api/register', { username: username, email: email, password: hashed_password }).then((response) => {
-      setMessage(response.data.message); setLoggedIn(true); alert("注册成功~"); setUserID(response.data.user.id);
+      setMessage(response.data.message);
+      alert("注册成功~");
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      setLoggedIn(true);
     }).catch(function (error) {
       console.log(error);
     });
   }, [usernameCorrect, emailCorrect]);
 
   return (
-    <div className="rounded-md">
+    <div className="rounded-xl border border-blue-300 p-5 space-y-5">
       <h2>Register</h2>
-      <form onSubmit={handleRegister}>
+      <form onSubmit={handleRegister} className='space-y-5'>
         <div>
 
           <Input setText={setUsername} Label={"用户名"} value={username} />

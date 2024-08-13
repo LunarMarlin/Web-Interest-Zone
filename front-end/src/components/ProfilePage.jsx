@@ -21,7 +21,7 @@ const ProfilePage = () => {
                 <div className="flex h-32 items-center px-4 py-5 bg-blue-200 justify-between">
                     <p className='text-3xl mx-20 text-gray-400'>{user.username}</p>
                 </div>
-                <ShowContent zones={null} user={userID} />
+                <ShowContent zones={null} selectedUser={userID} userID={userID} />
             </div>}
         </>
     );

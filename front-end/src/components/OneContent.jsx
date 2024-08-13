@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const OneContent = ({ post = null }) => {
+const OneContent = ({ post = null }, userID) => {
 
 
     const [zone, setZone] = useState(null);
@@ -19,21 +19,24 @@ const OneContent = ({ post = null }) => {
 
     const getInside = () => {
         if (!post) return;
-        window.open('/post/' + post.id + '/' + post.zone);
+        window.open('/post/' + post.id + '/' + post.zone + '/' + userID);
     }
     return (
         <>
             {user && zone &&
-                <button className='w-full' onClick={getInside}>
-                    <p>标题：{post.title}</p>
-                    <p>{new Date(post.created_date).toLocaleDateString(undefined, {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    })}</p>
-                    <p>分区：{zone.name}</p>
+                <button className='w-full flex flex-col justify-between p-10' onClick={getInside}>
+                    <div className='w-full h-4/5 flex flex-col justify-center items-center'>
+                        <p className='text-3xl break-all'>{post.title}</p>
+                        <p className='text-gray-400'>{new Date(post.created_at).toLocaleDateString(undefined, {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        })}</p>
+                        <p>分区：{zone.name}</p>
+                    </div>
+                    <p className='text-2xl'>{user.username}</p>
                 </button>
             }
         </>

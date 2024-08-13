@@ -3,18 +3,19 @@ import Input from './Input';
 import axios from 'axios';
 import ContentInput from './ContentInput';
 
-const PublishPost = ({ creator, zone, goBack }) => {
+const PublishPost = ({ zone, goBack }) => {
 
     const [title, setTitle] = useState('');
     const [introduction, setIntroduction] = useState('');
     const [content, setContent] = useState('');
     const [message, setMessage] = useState('');
     const client = axios.default;
+    const user = JSON.parse(localStorage.getItem('user'));
     const handleRegister = async (event) => {
         event.preventDefault();
         const block = document.getElementById('editable');
         const theContent = block.innerHTML;
-        client.post('http://localhost:7001/api/publishPost', { title: title, introduction: introduction, zone: zone.id, creator: creator.id, content: theContent }).then((response) => {
+        client.post('http://localhost:7001/api/publishPost', { title: title, introduction: introduction, zone: zone.id, creator: user.id, content: theContent }).then((response) => {
             setMessage(response.data.message); goBack();
         }).catch(function (error) {
             console.log(error);

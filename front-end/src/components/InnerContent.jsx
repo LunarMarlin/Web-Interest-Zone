@@ -4,7 +4,7 @@ import axios from 'axios';
 import SendComment from './SendComment';
 import OneComment from './OneComment';
 
-const InnerContent = ({ user }) => {
+const InnerContent = () => {
     const client = axios.default;
     const { postID, zoneID } = useParams();
     const [zone, setZone] = useState(null);
@@ -67,7 +67,7 @@ const InnerContent = ({ user }) => {
                         {post && length > post.replies_count + 1 && <p>—— 到此为止了 ——</p>}
                     </div>
                 </div >
-                <SendComment creator={user} post={post.id} addComment={addComment} />
+                <SendComment post={post.id} addComment={addComment} />
             </div>
             }
 
