@@ -61,7 +61,7 @@ const CheckMembers = () => {
 
     return (
         <>
-            {list?.length > 0 && <div className="flex flex-col px-80 py-5 max-h-[790px]  overflow-y-scroll items-center space-y-10 my-5" ref={ref} onScroll={scroll}>
+            {list?.length > 0 && <div className="flex flex-col px-80 py-5 max-h-[790px]  overflow-y-auto items-center space-y-10 my-5" ref={ref} onScroll={scroll}>
                 <p>最近发表：</p>
                 {Array.from({ length: Math.min(length, list.length) }, (_, index) => (
                     <div key={index} className="flex flex-shrink-0 bg-gray-300 h-[100px] w-full items-center space-x-10 p-10">

@@ -53,7 +53,7 @@ const InnerContent = () => {
     return (
         <>
             {post && comments && (Math.min(length, post.replies_count) <= comments.length) && <div className='flex items-center justify-center w-full h-full'>
-                < div className='flex flex-col w-full max-h-[790px] overflow-y-scroll items-center space-y-10 py-5 px-48' onScroll={scroll} ref={ref}>
+                < div className='flex flex-col w-full max-h-[790px] overflow-y-auto items-center space-y-10 py-5 px-48' onScroll={scroll} ref={ref}>
                     <div key={-1} className="flex bg-gray-300 w-full items-center">
                         <OneComment userID={post.creator} content={post.content} created_date={post.created_at} />
                     </div>

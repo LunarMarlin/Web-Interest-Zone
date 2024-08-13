@@ -29,7 +29,7 @@ const FindZone = ({ setZone }) => {
 
     return (
         <>
-            {zones?.length > 0 && <div className="flex flex-col px-80 py-5 max-h-[790px]  overflow-y-scroll items-center space-y-10" ref={ref} onScroll={scroll}>
+            {zones?.length > 0 && <div className="flex flex-col px-80 py-5 max-h-[790px]  overflow-y-auto items-center space-y-10" ref={ref} onScroll={scroll}>
                 {Array.from({ length: Math.min(length, zones.length) }, (_, index) => (
                     <div key={index} className="flex flex-shrink-0 bg-gray-300 h-[100px] w-full items-center">
                         <OneZone zone={zones[index]} setZone={setZone} />

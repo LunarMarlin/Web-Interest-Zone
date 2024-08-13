@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import OneContent from './OneContent';
 import axios from 'axios';
 
-const ShowContent = ({ zones = null, selectedUser = null, userID }) => {
+const ShowContent = ({ zones = null, selectedUser = null }) => {
     const [length, setLength] = useState(9);
     const [lastTop, setLastTop] = useState(6);
     const ref = useRef(null);
@@ -30,10 +30,10 @@ const ShowContent = ({ zones = null, selectedUser = null, userID }) => {
 
     return (
         <div>
-            {posts?.length > 0 && <div className="flex max-h-[770px] p-10 overflow-y-scroll grid grid-cols-3 gap-10 h-full" ref={ref} onScroll={scroll}>
+            {posts?.length > 0 && <div className="flex max-h-[770px] p-10 overflow-y-auto grid grid-cols-3 gap-10 h-full" ref={ref} onScroll={scroll}>
                 {Array.from({ length: Math.min(length, posts.length) }, (_, index) => (
                     <div key={index} className="bg-gray-300 flex h-80">
-                        <OneContent post={posts[index]} userID={userID} />
+                        <OneContent post={posts[index]} />
                     </div>
                 ))}
                 <div className="col-span-3 flex justify-center">

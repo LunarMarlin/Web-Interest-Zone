@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const OneContent = ({ post = null }, userID) => {
+const OneContent = ({ post = null }) => {
 
 
     const [zone, setZone] = useState(null);
@@ -19,7 +19,7 @@ const OneContent = ({ post = null }, userID) => {
 
     const getInside = () => {
         if (!post) return;
-        window.open('/post/' + post.id + '/' + post.zone + '/' + userID);
+        window.open('/post/' + post.id + '/' + post.zone);
     }
     return (
         <>

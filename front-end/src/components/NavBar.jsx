@@ -4,8 +4,9 @@ import FindZoneButton from './FindZoneButton';
 import Input from './Input'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-const NavBar = ({ toFindZone, setToFindZone, inside = false, zone = null }) => {
+const NavBar = ({ toFindZone, setToFindZone, inside = false }) => {
     const navigate = useNavigate();
+    const zone = JSON.parse(localStorage.getItem('zone'));
     const user = JSON.parse(localStorage.getItem('user'));
     return <>
         <nav className="flex h-20 items-center px-4 py-5 bg-blue-200 justify-between">

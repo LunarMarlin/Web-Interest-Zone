@@ -22,8 +22,8 @@ const SendComment = ({ post, addComment }) => {
     }
 
     return <>
-        <form onSubmit={submit} className="flex h-20 fixed bottom-0 items-center px-4 py-5 space-x-5 bg-blue-200 justify-between w-3/5">
-            <div className="flex flex-grow h-full space-x-5 rounded-md">
+        <form onSubmit={submit} className="flex min-h-20 max-h-90 fixed bottom-0 items-center px-4 py-5 space-x-5 bg-blue-200 justify-between w-3/5">
+            <div className="flex flex-grow h-full max-h-80 space-x-5 rounded-md break-all">
                 <ContentInput value={content} setText={setContent} placeholder={'回复...'} />
             </div>
             <button type="submit" className='button'>回复</button>

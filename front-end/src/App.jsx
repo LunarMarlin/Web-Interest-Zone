@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'
 import Register from './components/Register'
 import Login from './components/Login'
@@ -26,13 +26,14 @@ function App() {
   const [zone, setZone] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [toFindZone, setToFindZone] = useState(false);
-  const client = axios.default;
 
-  const updateZone = (zone) => {
-    return () => {
-      setZone(zone);
-    }
+
+  const settoFindZoneFunc = (val) => {
+    localStorage.setItem('toFindZone', val);
+    console.log(val);
+    setToFindZone(val);
   }
+
   useEffect(() => {
     if (zone !== null) {
       navigate('/zone/:' + zone.name);
@@ -40,9 +41,13 @@ function App() {
   }, [zone]);
 
   useEffect(() => {
-    const a = JSON.parse(localStorage.getItem('user'));
-    if (a) {
-      setUser(a);
+    const userTemp = JSON.parse(localStorage.getItem('user'));
+    if (userTemp) {
+      setUser(userTemp);
+    }
+    const b = JSON.parse(localStorage.getItem('toFindZone'));
+    if (b) {
+      setToFindZone(b);
     }
   }, []);
 
@@ -51,13 +56,24 @@ function App() {
     setUser(JSON.parse(localStorage.getItem('user')));
     navigate('/mainPage')
   }, [loggedIn]);
+  if (!user) return (
+    <Routes>
+      <Route path="*" element={<Navigate to="/" />} />
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
+      <Route path="/" element={
+        < div className='flex h-screen w-screen items-center justify-center'>
+          <div className='flex space-x-20'>
+            <Register setLoggedIn={setLoggedIn} />
+            <Login setLoggedIn={setLoggedIn} />
+          </div>
+        </div>
+      } />
+    </Routes >
+  )
 
   return (
     <Routes>
+
       <Route path="/" element={
         < div className='flex h-screen w-screen items-center justify-center'>
           <div className='flex space-x-20'>
@@ -69,9 +85,9 @@ function App() {
       < Route path="/mainPage" element={
 
         < div className='flex flex-col h-screen space-y-5' >
-          <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} />
+          <NavBar toFindZone={toFindZone} setToFindZone={settoFindZoneFunc} />
           {!toFindZone && <Recommendation />}
-          {toFindZone && <FindZone setZone={updateZone} />}
+          {toFindZone && <FindZone setZone={setZone} />}
         </div >
 
 
@@ -80,21 +96,21 @@ function App() {
       < Route path="/zone/:name" element={
         <>
 
-          <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} inside={true} zone={zone} />
+          <NavBar toFindZone={toFindZone} setToFindZone={settoFindZoneFunc} inside={true} />
           <div className="mb-5" />
-          <InnerZone zone={zone} />
+          <InnerZone />
         </>} />
 
 
       < Route path="/publishPost" element={
         < div className="flex flex-col h-screen" >
-          <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} />
-          <PublishPost zone={zone} goBack={() => { navigate('/zone/:' + zone.name); alert('发布成功!'); }} />
+          <NavBar toFindZone={toFindZone} setToFindZone={settoFindZoneFunc} />
+          <PublishPost goBack={() => { navigate('/zone/:' + zone.name); alert('发布成功!'); }} />
         </div >
 
       } />
 
-      < Route path="/post/:postID/:zoneID/:userID" element={
+      < Route path="/post/:postID/:zoneID" element={
         < div >
           {< InnerContent />}
         </div >
@@ -109,7 +125,7 @@ function App() {
 
       < Route path="/checkMembers/:zoneID" element={
         < div >
-          <NavBar toFindZone={toFindZone} setToFindZone={setToFindZone} inside={true} />
+          <NavBar toFindZone={toFindZone} setToFindZone={settoFindZoneFunc} inside={true} />
           <CheckMembers />
         </div >
       } />
